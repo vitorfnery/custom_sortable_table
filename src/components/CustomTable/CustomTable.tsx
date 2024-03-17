@@ -1,19 +1,15 @@
 import { useState } from "react";
+import { Pagination } from "./Pagination";
+import { TableHead } from "./TableHead";
+import { IColumn, ICustomTable, Item } from "../../interfaces/CustomTable";
+import { TableBody } from "./TableBody";
 
-interface Item {
-  id: number;
-  city: string;
-  country: string;
-}
-
-interface CustomTableProps {
-  items: Item[];
-  options: number[];
-}
-
-export const CustomTable = ({ items, options }: CustomTableProps) => {
+export const CustomTable = ({ items, options }: ICustomTable) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [sortField, setSortField] = useState<keyof Item | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
   const handleCurrentPage = (pageNum: number) => {
@@ -27,50 +23,72 @@ export const CustomTable = ({ items, options }: CustomTableProps) => {
     setCurrentPage(1);
   };
 
+  const sortItems = (items: Item[]): Item[] => {
+    if (!sortField) return items;
+
+    return [...items].sort((a, b) => {
+      if (a[sortField] < b[sortField]) {
+        return sortDirection === "asc" ? -1 : 1;
+      }
+      if (a[sortField] > b[sortField]) {
+        return sortDirection === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+  };
+
+  const handleSort = (field: keyof Item) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const itemsDisplayed = items.slice(startIndex, endIndex);
+  const sortedItems = sortItems(items);
+  const itemsDisplayed = sortedItems.slice(startIndex, endIndex);
+  const columns: IColumn[] = [
+    { label: "Full Name", accessor: "fullName" },
+    { label: "Email", accessor: "email" },
+    { label: "Age", accessor: "age" },
+    { label: "Start date", accessor: "startDate" },
+  ];
 
   return (
     <div>
-      <div>
-        <label htmlFor="howManyPerPage">Select how many items per page</label>
-        <select
-          id="howManyPerPage"
-          value={itemsPerPage}
-          onChange={handleItemsPerPage}
-        >
-          {options.map((option, index) => (
-            <option value={option} key={index}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button onClick={() => handleCurrentPage(i + 1)}>{i + 1}</button>
-        ))}
-      </div>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>City</th>
-              <th>Country</th>
+      <table>
+        <caption>Caption here</caption>
+        <TableHead columns={columns} />
+        <TableBody items={itemsDisplayed} columns={columns} />
+        {/* <thead>
+          <tr>
+            <th onClick={() => handleSort("fullName")}>Full Name</th>
+            <th onClick={() => handleSort("email")}>E-mail</th>
+            <th onClick={() => handleSort("age")}>Age</th>
+            <th onClick={() => handleSort("startDate")}>Start Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {itemsDisplayed.map(({ id, fullName, email, age, startDate }) => (
+            <tr key={id}>
+              <td>{fullName}</td>
+              <td>{email}</td>
+              <td>{age}</td>
+              <td>{startDate.toString()}</td>
             </tr>
-          </thead>
-          <tbody>
-            {itemsDisplayed.map(({ id, city, country }) => (
-              <tr key={id}>
-                <td>{city}</td>
-                <td>{country}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody> */}
+      </table>
+      <Pagination
+        options={options}
+        itemsPerPage={itemsPerPage}
+        totalPages={totalPages}
+        handleItemsPerPage={handleItemsPerPage}
+        handleCurrentPage={handleCurrentPage}
+      />
     </div>
   );
 };
-
