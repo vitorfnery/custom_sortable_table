@@ -60,14 +60,14 @@ export const CustomTable = ({ items, options }: ICustomTable) => {
   return (
     <div>
       <table>
-        <caption>Table with Order and Pagination</caption>
+        <caption>Sortable Table with Pagination</caption>
         <TableHead
           columns={columns}
           handleSorting={handleSorting}
           sortField={sortField}
           sortOrder={sortOrder}
         />
-        <TableBody columns={columns} items={itemsDisplayed} />
+        <TableBody items={itemsDisplayed} />
       </table>
       <Pagination
         options={options}

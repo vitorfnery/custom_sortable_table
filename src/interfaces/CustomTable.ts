@@ -3,7 +3,7 @@ export interface Item {
   fullName: string;
   email: string;
   age: number;
-  startDate: string;
+  startDate: Date;
 }
 
 export interface ICustomTable {
@@ -25,7 +25,6 @@ export interface ITableHead {
 }
 
 export interface ITableBody {
-  columns: IColumn[];
   items: Item[];
 }
 
