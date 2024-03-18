@@ -10,7 +10,7 @@ Built with pure TypeScript and React, this component avoids external libraries f
 
 See a live demo here: [Custom Sortable Table - Vítor F. Nery](https://custom-sortable-table-vitorfnery.netlify.app/)
 
-## Technologies
+## 🛠️ Technologies 
 
 - React
 - TypeScript
