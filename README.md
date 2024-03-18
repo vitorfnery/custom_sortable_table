@@ -8,7 +8,7 @@ This React component provides a customizable sortable table. Users can sort colu
 
 Built with pure TypeScript and React, this component avoids external libraries for maximum control and flexibility.
 
-See a live demo here: [Custom Sortable Table - Vítor F. Nery](https://custom-table-vitorfnery.netlify.app/)
+See a live demo here: [Custom Sortable Table - Vítor F. Nery](https://custom-sortable-table-vitorfnery.netlify.app/)
 
 ## Technologies
 
