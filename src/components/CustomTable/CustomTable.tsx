@@ -8,7 +8,7 @@ export const CustomTable = ({ items, options }: ICustomTable) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [sortField, setSortField] = useState<keyof Item | null>(null);
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
@@ -28,21 +28,21 @@ export const CustomTable = ({ items, options }: ICustomTable) => {
 
     return [...items].sort((a, b) => {
       if (a[sortField] < b[sortField]) {
-        return sortDirection === "asc" ? -1 : 1;
+        return sortOrder === "asc" ? -1 : 1;
       }
       if (a[sortField] > b[sortField]) {
-        return sortDirection === "asc" ? 1 : -1;
+        return sortOrder === "asc" ? 1 : -1;
       }
       return 0;
     });
   };
 
-  const handleSort = (field: keyof Item) => {
+  const handleSorting = (field: keyof Item) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection("asc");
+      setSortOrder("asc");
     }
   };
 
@@ -51,36 +51,23 @@ export const CustomTable = ({ items, options }: ICustomTable) => {
   const sortedItems = sortItems(items);
   const itemsDisplayed = sortedItems.slice(startIndex, endIndex);
   const columns: IColumn[] = [
-    { label: "Full Name", accessor: "fullName" },
-    { label: "Email", accessor: "email" },
-    { label: "Age", accessor: "age" },
-    { label: "Start date", accessor: "startDate" },
+    { label: "Full Name", accessor: "fullName", sortable: true },
+    { label: "Email", accessor: "email", sortable: true },
+    { label: "Age", accessor: "age", sortable: true },
+    { label: "Start date", accessor: "startDate", sortable: true },
   ];
 
   return (
     <div>
       <table>
-        <caption>Caption here</caption>
-        <TableHead columns={columns} />
-        <TableBody items={itemsDisplayed} columns={columns} />
-        {/* <thead>
-          <tr>
-            <th onClick={() => handleSort("fullName")}>Full Name</th>
-            <th onClick={() => handleSort("email")}>E-mail</th>
-            <th onClick={() => handleSort("age")}>Age</th>
-            <th onClick={() => handleSort("startDate")}>Start Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {itemsDisplayed.map(({ id, fullName, email, age, startDate }) => (
-            <tr key={id}>
-              <td>{fullName}</td>
-              <td>{email}</td>
-              <td>{age}</td>
-              <td>{startDate.toString()}</td>
-            </tr>
-          ))}
-        </tbody> */}
+        <caption>Table with Order and Pagination</caption>
+        <TableHead
+          columns={columns}
+          handleSorting={handleSorting}
+          sortField={sortField}
+          sortOrder={sortOrder}
+        />
+        <TableBody columns={columns} items={itemsDisplayed} />
       </table>
       <Pagination
         options={options}

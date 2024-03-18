@@ -1,6 +1,6 @@
 import { ITableBody } from "../../interfaces/CustomTable";
 
-export const TableBody = ({ items, columns }: ITableBody) => {
+export const TableBody = ({ columns, items }: ITableBody) => {
   return (
     <tbody>
       {items.map((item) => {

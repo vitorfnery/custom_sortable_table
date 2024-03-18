@@ -14,15 +14,19 @@ export interface ICustomTable {
 export interface IColumn {
   label: string;
   accessor: keyof Item;
+  sortable: boolean;
 }
 
 export interface ITableHead {
   columns: IColumn[];
+  handleSorting: (field: keyof Item) => void;
+  sortField: keyof Item | null;
+  sortOrder: "asc" | "desc";
 }
 
 export interface ITableBody {
-    items: Item[];
-    columns: IColumn[]; 
+  columns: IColumn[];
+  items: Item[];
 }
 
 export interface IPagination {
