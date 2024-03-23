@@ -1,5 +1,4 @@
 import { IPagination } from "../../interfaces/CustomTable";
-import "./styles.css";
 
 export const Pagination = ({
   options,
